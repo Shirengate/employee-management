@@ -27,9 +27,26 @@ export const useFetchData = () => {
       }
     } catch (e) {
       alert("Во время отправки данных произошла ошибка");
+      throw new Error(e);
     }
   }
-
-  async function patchData(id, body) {}
-  return { getData, postData };
+  async function patchData(url, body) {
+    try {
+      const response = await fetch(url, {
+        method: "PUT",
+        headers: {
+          "Content-type": "application/json",
+        },
+        body: JSON.stringify(body),
+      });
+      if (!response.ok) {
+        throw new Error(response.status);
+      }
+      console.log(response);
+    } catch (e) {
+      alert("Во время редактировании данных произошла ошибка");
+      throw new Error(e);
+    }
+  }
+  return { getData, postData, patchData };
 };

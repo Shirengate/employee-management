@@ -1,7 +1,7 @@
 <template>
-  <modal @close="emit('close')" :title="'Добавить сотрудника'">
+  <modal @close="emit('close')" :title="'Редактировать сотрудника'">
     <div class="modal-body">
-      <form @submit.prevent="addEmployee">
+      <form @submit.prevent="patchEmployee">
         <div class="form-group">
           <label for="employee_name">ФИО:</label>
           <input
@@ -52,11 +52,14 @@ import Loader from "../UI/Loader.vue";
 
 import { useFetchData } from "@/composables/useFetchData";
 import { useValidData } from "@/utils/useValidData.js";
-import { reactive, ref } from "vue";
+import { reactive, ref, onMounted } from "vue";
 
 const emit = defineEmits(["close", "updateData"]);
+const props = defineProps({
+  id: [Number, String],
+});
 
-const { postData } = useFetchData();
+const { patchData, getData } = useFetchData();
 const { checkValidFields } = useValidData();
 const employeeInfo = reactive({
   employee_name: "",
@@ -65,7 +68,23 @@ const employeeInfo = reactive({
 });
 const loading = ref(false);
 
-async function addEmployee() {
+onMounted(async () => {
+  try {
+    const data = await getData(
+      `https://dummy.restapiexample.com/api/v1/employee/{${props.id}`
+    );
+    if (data) {
+      employeeInfo.employee_name = data.employee_name;
+      employeeInfo.employee_salary = data.employee_salary;
+      employeeInfo.employee_age = data.employee_age;
+      return;
+    }
+  } catch (e) {
+    console.error("Ошибка при получении данных:", error);
+  }
+});
+
+async function patchEmployee() {
   if (!checkValidFields(employeeInfo)) {
     return alert("Заполните все поля");
   }
@@ -73,15 +92,14 @@ async function addEmployee() {
   loading.value = true;
 
   try {
-    await postData(
-      "https://dummy.restapiexample.com/api/v1/create",
+    await patchData(
+      `https://dummy.restapiexample.com/api/v1/update/${props.id}`,
       employeeInfo
     );
-
     emit("close");
     emit("updateData");
   } catch (error) {
-    console.error("Ошибка при добавлении данных:", error);
+    console.error("Ошибка при обновлении данных:", error);
   } finally {
     loading.value = false;
   }

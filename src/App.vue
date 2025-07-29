@@ -2,14 +2,26 @@
   <div class="wrapper">
     <div class="panel">
       <Header @add-employee="modalStatuses.add = true" />
-      <Dashboard :employees="employees" :loading="loading" />
+      <Dashboard
+        :employees="employees"
+        :loading="loading"
+        @patch-emp="test"
+        @delete-emp="test"
+      />
     </div>
     <Transition>
       <add-modal
         @close="modalStatuses.add = false"
         @update-data="fetchEmployees"
         v-if="modalStatuses.add"
-        :title="'Добавить сотрудника'"
+      />
+    </Transition>
+    <Transition>
+      <patch-modal
+        v-if="modalStatuses.patch"
+        :id="userId"
+        @close="modalStatuses.patch = false"
+        @update-data="fetchEmployees"
       />
     </Transition>
   </div>
@@ -20,7 +32,7 @@ import Header from "@/components/Panel/Header.vue";
 import Btn from "@/components/UI/Btn.vue";
 import Dashboard from "@/components/Panel/Dashboard.vue";
 import AddModal from "./components/Employees/AddModal.vue";
-
+import PatchModal from "./components/Employees/PatchModal.vue";
 import { onMounted, reactive, ref } from "vue";
 import { useFetchData } from "@/composables/useFetchData.js";
 
@@ -30,8 +42,14 @@ const loading = ref(false);
 const modalStatuses = reactive({
   add: false,
   delete: false,
+  patch: false,
 });
+const userId = ref(null);
 
+function test(e) {
+  modalStatuses.patch = true;
+  userId.value = e;
+}
 async function fetchEmployees() {
   loading.value = true;
   try {

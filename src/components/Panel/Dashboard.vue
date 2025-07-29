@@ -11,13 +11,21 @@
         </tr>
       </thead>
       <tbody>
-        <tr v-for="(employee, index) in employees" :key="employee.id">
+        <tr
+          v-for="(employee, index) in employees"
+          :key="employee.id"
+          @dblclick="emit('patchEmp', employee.id)"
+        >
           <td>{{ index }}</td>
           <td>{{ employee.employee_name }}</td>
           <td>{{ employee.employee_salary }}</td>
           <td>{{ employee.employee_age }}</td>
           <td>
-            <Btn :text="'Удалить'" class="delete-btn" />
+            <Btn
+              :text="'Удалить'"
+              class="delete-btn"
+              @click="emit('deleteEmp', employee.id)"
+            />
           </td>
         </tr>
       </tbody>
@@ -31,14 +39,16 @@
 import Btn from "@/components/UI/Btn.vue";
 import NoData from "@/components/Panel/NoData.vue";
 import Loader from "../UI/Loader.vue";
+
 import { ref, computed } from "vue";
+
 const props = defineProps({
   employees: {
     type: [Array, String],
   },
   loading: Boolean,
 });
-
+const emit = defineEmits(["patchEmp", "deleteEmp"]);
 const targetStatus = computed(() => {
   if (!props.employees && !props.loading) {
     return NoData;
