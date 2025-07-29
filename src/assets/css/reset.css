@@ -1,0 +1,48 @@
+/* Basic reset */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+/* Remove list styles */
+ul,
+ol {
+  list-style: none;
+}
+
+/* Remove default link styling */
+a {
+  text-decoration: none;
+  color: inherit;
+}
+
+/* Reset form elements */
+button,
+input,
+textarea,
+select {
+  font: inherit;
+  background: none;
+  border: none;
+}
+
+/* Remove button styling */
+button {
+  cursor: pointer;
+  background: none;
+}
+
+/* Remove table spacing */
+table {
+  border-collapse: collapse;
+  border-spacing: 0;
+}
+
+/* Remove default image spacing */
+img {
+  display: block;
+  max-width: 100%;
+}
