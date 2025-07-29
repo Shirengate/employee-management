@@ -27,7 +27,6 @@ export const useFetchData = () => {
       }
     } catch (e) {
       alert("Во время отправки данных произошла ошибка");
-      throw new Error(e);
     }
   }
   async function patchData(url, body) {
