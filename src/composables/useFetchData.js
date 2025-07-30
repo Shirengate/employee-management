@@ -47,5 +47,20 @@ export const useFetchData = () => {
       throw new Error(e);
     }
   }
-  return { getData, postData, patchData };
+
+  async function deleteData(url) {
+    try {
+      const response = await fetch(url, {
+        method: "DELETE",
+      });
+      if (!response.ok) {
+        throw new Error(response.status);
+      }
+      console.log(response);
+    } catch (e) {
+      alert("Во время удаления данных произошла ошибка");
+      throw new Error(e);
+    }
+  }
+  return { getData, postData, patchData, deleteData };
 };

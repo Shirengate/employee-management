@@ -5,8 +5,8 @@
       <Dashboard
         :employees="employees"
         :loading="loading"
-        @patch-emp="test"
-        @delete-emp="test"
+        @patch-emp="processId"
+        @delete-emp="processId"
       />
     </div>
     <Transition>
@@ -24,6 +24,14 @@
         @update-data="fetchEmployees"
       />
     </Transition>
+    <Transition>
+      <delete-modal
+        v-if="modalStatuses.delete"
+        :id="userId"
+        @close="modalStatuses.delete = false"
+        @update-data="fetchEmployees"
+      />
+    </Transition>
   </div>
 </template>
 
@@ -33,6 +41,7 @@ import Btn from "@/components/UI/Btn.vue";
 import Dashboard from "@/components/Panel/Dashboard.vue";
 import AddModal from "./components/Employees/AddModal.vue";
 import PatchModal from "./components/Employees/PatchModal.vue";
+import DeleteModal from "./components/Employees/DeleteModal.vue";
 import { onMounted, reactive, ref } from "vue";
 import { useFetchData } from "@/composables/useFetchData.js";
 
@@ -46,9 +55,9 @@ const modalStatuses = reactive({
 });
 const userId = ref(null);
 
-function test(e) {
-  modalStatuses.patch = true;
-  userId.value = e;
+function processId(id, process) {
+  modalStatuses[process] = true;
+  userId.value = id;
 }
 async function fetchEmployees() {
   loading.value = true;

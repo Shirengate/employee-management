@@ -14,7 +14,7 @@
         <tr
           v-for="(employee, index) in employees"
           :key="employee.id"
-          @dblclick="emit('patchEmp', employee.id)"
+          @dblclick="emit('patchEmp', employee.id, 'patch')"
         >
           <td>{{ index }}</td>
           <td>{{ employee.employee_name }}</td>
@@ -24,7 +24,7 @@
             <Btn
               :text="'Удалить'"
               class="delete-btn"
-              @click="emit('deleteEmp', employee.id)"
+              @click.stop="emit('deleteEmp', employee.id, 'delete')"
             />
           </td>
         </tr>
