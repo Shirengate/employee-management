@@ -4,6 +4,6 @@
 
 ### 2. Сборка докер образа (docker build -t vue-app .)
 
-### 3. Запуск контейнера (docker run -d -p 3000:80 --name vue-container vue-app)
+### 3. Запуск контейнера (docker run -d -p 3000:80  vue-app)
 
 ### 4. Откройте в браузере http://localhost:3000
